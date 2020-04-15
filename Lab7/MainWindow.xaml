@@ -1,0 +1,420 @@
+﻿<Window x:Class="Lab7.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab7"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Shrek's Todolist" MinHeight="450" MinWidth="800"
+        Background="#064CDB"
+        Icon="Resources/Icon/Shreks.ico">
+    <Window.Resources>
+        <!-- Enum converter for combobox -->
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:Category"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <!-- Bool to visibility -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+
+        <!-- Cursor -->
+        <Cursor x:Key="OpenHandCursor">Resources/Cursor/Bread.cur</Cursor>
+
+        <!-- Styles -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="AliceBlue"/>
+        </Style>
+        <Style TargetType="Calendar">
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="BorderBrush" Value="White"></Setter>
+            <Setter Property="FontFamily" Value="Sen"></Setter>
+            <Setter Property="Language" Value="En"></Setter>
+            <Setter Property="FontSize" Value="50"></Setter>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="#FFB3B3B3"/>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="BorderThickness" Value="0"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Background" Value="#f8f8f8" />
+                    <Setter Property="Foreground" Value="Black"></Setter>
+                    <Setter Property="FontWeight" Value="Bold"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="FontFamily" Value="Sen"></Setter>
+            <Setter Property="FontSize" Value="15"></Setter>
+            <Setter Property="GridLinesVisibility" Value="None"></Setter>
+        </Style>
+        <Style TargetType="MenuItem">
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Sen" FontWeight="Bold" FontSize="15">
+                        </TextBlock>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" Value="Snow" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
+    <!-- Main grid -->
+    <Grid Cursor="{StaticResource OpenHandCursor}">
+        
+        <Grid.Resources>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*">
+            </ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <!-- Calendar and sort buttons -->
+        <Border 
+            CornerRadius="5" 
+            Grid.RowSpan="2" 
+            Background="White" 
+            Margin="4">
+            <Grid>
+                
+                <!-- Adaptive calendar -->
+                <Viewbox 
+                    HorizontalAlignment="Stretch" 
+                    MaxHeight="260" 
+                    VerticalAlignment="Top">
+                    <Calendar SelectedDatesChanged="MonthlyCalendar_SelectedDatesChanged">
+                    </Calendar>
+                </Viewbox>
+                
+                <!-- Sort buttons -->
+                <Button 
+                    Content="{DynamicResource sorter_Home}" 
+                    Height="30" 
+                    Name="home" 
+                    Command="{Binding mainWindow.Sort}" 
+                    CommandParameter="HOME" 
+                    FontSize="20">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="BorderThickness" Value="0"></Setter>
+                            <Setter Property="Background" Value="Snow"></Setter>
+                            <Setter Property="FontFamily" Value="Sen"></Setter>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button 
+                    Content="{DynamicResource sorter_Work}" 
+                    Height="30" 
+                    Margin="0, 50, 0, 0" 
+                    Command="{Binding mainWindow.Sort}" 
+                    CommandParameter="WORK"
+                    FontSize="20">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="BorderThickness" Value="0"></Setter>
+                            <Setter Property="Background" Value="Snow"></Setter>
+                            <Setter Property="FontFamily" Value="Sen"></Setter>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button 
+                    Content="{DynamicResource sorter_Study}" 
+                    Height="30" 
+                    Margin="0, 100, 0, 0" 
+                    Command="{Binding mainWindow.Sort}" 
+                    CommandParameter="STUDY" 
+                    FontSize="20">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="BorderThickness" Value="0"></Setter>
+                            <Setter Property="Background" Value="Snow"></Setter>
+                            <Setter Property="FontFamily" Value="Sen"></Setter>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button 
+                    Content="{DynamicResource sorter_Rest}" 
+                    Height="30" 
+                    Margin="0, 150, 0, 0" 
+                    Command="{Binding mainWindow.Sort}" 
+                    CommandParameter="REST" 
+                    FontSize="20">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="BorderThickness" Value="0"></Setter>
+                            <Setter Property="Background" Value="Snow"></Setter>
+                            <Setter Property="FontFamily" Value="Sen"></Setter>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <!-- Error message -->
+                <TextBlock 
+                    VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Center" 
+                    Text="{DynamicResource error_NotSelected}" 
+                    Visibility="{Binding mainWindow.SelectionError,Converter={StaticResource BoolToVisConverter}}" 
+                    FontFamily="Sen" 
+                    FontSize="30" 
+                    Foreground="Red" 
+                    FontWeight="Bold">
+                </TextBlock>
+            </Grid>
+        </Border>
+        
+        <!-- Current date -->
+        <Border CornerRadius="5" Grid.Column="1" Background="White" Margin="4">
+            <Grid HorizontalAlignment="Stretch" MaxHeight="260" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Menu DockPanel.Dock="Top" Background="Snow" Margin="20, 0, 0, 0" Grid.Row="0">
+                    <MenuItem x:Name="menuLanguage" Header="{DynamicResource lang}" >
+                    </MenuItem>
+                    <MenuItem Header="Save To XML" Command="{Binding mainWindow.SaveToXML}"></MenuItem>
+                </Menu>
+                <TextBlock 
+                    Text="{Binding mainWindow.SelectedDate.Date, 
+                                   StringFormat={}{0:MM/dd/yyyy}}"
+                    FontFamily="Sen"
+                    Foreground="#064CDB"
+                    Grid.Row="1"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Center"
+                    FontSize="70">
+                </TextBlock>
+            </Grid>
+        </Border>
+        
+        <!-- Form and Data grid -->
+        <Border  
+            Grid.Column="1" 
+            Grid.Row="2" 
+            CornerRadius="3" 
+            BorderBrush="White" 
+            BorderThickness="4" 
+            Background="White"  
+            Margin="4, 0, 4, 4" 
+            Padding="0">
+            <Grid Margin="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition ></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <!-- Form -->
+                <Grid Height="80" HorizontalAlignment="Stretch"  Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Content="{DynamicResource datagrid_Name}"></Label>
+                    <TextBox 
+                        HorizontalAlignment="Stretch" 
+                        Grid.Column="0" 
+                        Height="30" 
+                        VerticalAlignment="Top" 
+                        Margin="43,0,10,0" 
+                        Name="name"
+                        Text="{Binding todoTask.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="7"></Setter>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <Grid Margin="10,30,10,14.8" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{DynamicResource datagrid_Time}" Margin="-10,15,9.8,-14.8"/>
+                        <TextBox 
+                    HorizontalAlignment="Left" 
+                    Grid.Column="1" 
+                    Height="30" 
+                    Name="time" 
+                    Width="60"
+                    Text="{Binding todoTask.Time, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="7"></Setter>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <ComboBox 
+                            Grid.Column="2"  
+                            Margin="0.4,15,10,10.2" 
+                            Name="type" 
+                            ItemsSource="{Binding Source={StaticResource dataFromEnum}}" 
+                            SelectedIndex="0"/>
+                    </Grid>
+                    <Grid Grid.Column="1" Margin="10,0,10.2,-9.2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="14*"></RowDefinition>
+                            <RowDefinition Height="19*"/>
+                            <RowDefinition Height="9*"></RowDefinition>
+                            <RowDefinition Height="25*"/>
+                            <RowDefinition Height="34*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label Content="{DynamicResource datagrid_Description}" Grid.RowSpan="2"/>
+                        <TextBox 
+                    Grid.RowSpan="4" 
+                    TextWrapping="Wrap" 
+                    Margin="0,12.8,-1,36.6" 
+                    Name="description" 
+                    Text="{Binding todoTask.Description, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    Grid.Row="1">
+                            <TextBox.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="7"></Setter>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                    </Grid>
+
+
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="{DynamicResource datagrid_Repeat}"></Label>
+                    <TextBox  
+                        Grid.Column="0" 
+                        Height="30" 
+                        VerticalAlignment="Top" 
+                        Name="repeat" 
+                        Text="{Binding todoTask.RepeatPeriod, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                        Margin="58,0,0.4,0" >
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="7"></Setter>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <Label 
+                        Content="{DynamicResource datagrid_Priority}" 
+                        Grid.ColumnSpan="2" 
+                        Grid.Column="1" 
+                        Margin="4.6,0,132.6,0"></Label>
+                    <TextBox 
+                Grid.Column="1"
+                Height="30" 
+                VerticalAlignment="Top" 
+                Margin="58.6,0,9,0" 
+                Name="priority" 
+                Text="{Binding todoTask.Priority, ValidatesOnDataErrors=True}">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="7"></Setter>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Grid>
+                <Button Grid.Row="2" Click="Button_Click" Content="{DynamicResource addItem}">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Foreground" Value="#064CDB"></Setter>
+                            <Setter Property="FontSize" Value="30"></Setter>
+                            <Setter Property="FontFamily" Value="Sen"></Setter>
+                            <Setter Property="Background" Value="White"></Setter>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                            <Setter Property="Height" Value="40"></Setter>
+                            <Setter Property="BorderBrush" Value="#064CDB"></Setter>
+                            <Setter Property="Margin" Value="0, 0, 0, 10"></Setter>
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=name}" Value="False"/>
+                                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=description}" Value="False"/>
+                                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=priority}" Value="False"/>
+                                        <Condition Binding="{Binding Path=(Validation.HasError), ElementName=repeat}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                
+                <!-- Data -->
+                <DataGrid 
+                    Name="Itemcollection" 
+                    ItemsSource="{Binding mainWindow.Tasks, 
+                                    Mode=TwoWay, 
+                                    ValidatesOnDataErrors=True}"  
+                    BorderThickness="0" 
+                    BorderBrush="White" 
+                    Background="White" 
+                    HorizontalAlignment="Stretch" 
+                    AutoGenerateColumns="False" 
+                    RowHeaderWidth="0" 
+                    ColumnWidth="*" 
+                    VerticalScrollBarVisibility="Auto" 
+                    Grid.Row="3"
+                    SelectedIndex="{Binding Path=mainWindow.RecordIndex,Mode=TwoWay}">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding mainWindow.DeleteCommand}"  
+                                      Header="Delete"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{DynamicResource datagrid_Time}" Binding="{Binding Time, ValidatesOnDataErrors=True}" MinWidth="50" ></DataGridTextColumn>
+                        <DataGridTextColumn Header="{DynamicResource datagrid_Name}" Binding="{Binding Name, ValidatesOnDataErrors=True}" MinWidth="120"></DataGridTextColumn>
+                        <DataGridTemplateColumn MinWidth="130" Header="{DynamicResource datagrid_Description}" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate >
+                                    <TextBox 
+                                        Text="{Binding Description, ValidatesOnDataErrors=True}" 
+                                        TextWrapping="Wrap" 
+                                        BorderThickness="0" 
+                                        SelectionBrush="#064CDB">
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{DynamicResource datagrid_Repeat}" Binding="{Binding RepeatPeriod, ValidatesOnDataErrors=True}" MinWidth="70"></DataGridTextColumn>
+                        <DataGridTextColumn Header="{DynamicResource datagrid_Priority}" Binding="{Binding Priority, ValidatesOnDataErrors=True}" MinWidth="60"></DataGridTextColumn>
+                        <DataGridTextColumn Header="{DynamicResource datagrid_Category}" Binding="{Binding Category}" MinWidth="100">
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

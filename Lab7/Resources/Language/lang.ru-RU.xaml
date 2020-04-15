@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Lab7"
+                    xmlns:v="clr-namespace:System;assembly=mscorlib">
+    <v:String x:Key="sorter_Home">ДОМ</v:String>
+    <v:String x:Key="sorter_Work">РАБОТА</v:String>
+    <v:String x:Key="sorter_Rest">ОТДЫХ</v:String>
+    <v:String x:Key="sorter_Study">УЧЕБА</v:String>
+    <v:String x:Key="datagrid_Time">Время</v:String>
+    <v:String x:Key="datagrid_Name">Название</v:String>
+    <v:String x:Key="datagrid_Description">Описание</v:String>
+    <v:String x:Key="datagrid_Repeat">Повторить через</v:String>
+    <v:String x:Key="datagrid_Priority">Приоритет</v:String>
+    <v:String x:Key="datagrid_Category">Категория</v:String>
+    <v:String x:Key="addItem">+Добавить новый</v:String>
+    <v:String x:Key="lang">RU</v:String>
+    <v:String x:Key="error_NotSelected">Выберите дату</v:String>
+</ResourceDictionary>

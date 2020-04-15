@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"           
+                    xmlns:v="clr-namespace:System;assembly=mscorlib">
+    <v:String x:Key="sorter_Home">HOME</v:String>
+    <v:String x:Key="sorter_Work">WORK</v:String>
+    <v:String x:Key="sorter_Rest">REST</v:String>
+    <v:String x:Key="sorter_Study">STUDY</v:String>
+    <v:String x:Key="datagrid_Time">Time</v:String>
+    <v:String x:Key="datagrid_Name">Name</v:String>
+    <v:String x:Key="datagrid_Description">Description</v:String>
+    <v:String x:Key="datagrid_Repeat">Repeat in</v:String>
+    <v:String x:Key="datagrid_Priority">Priority</v:String>
+    <v:String x:Key="datagrid_Category">Category</v:String>
+    <v:String x:Key="addItem">+Add new</v:String>
+    <v:String x:Key="lang">EN</v:String>
+    <v:String x:Key="error_NotSelected">Choose date</v:String>
+</ResourceDictionary>
